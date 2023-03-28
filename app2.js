@@ -5,7 +5,9 @@ const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const Restaurant = require('./models/restaurant')
+const ejsMate = require('ejs-mate');
 
+app.engine('ejs', ejsMate)
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('__method'))
