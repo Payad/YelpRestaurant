@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a Restaurant</title>
+</head>
+<body>
+    <div class="container">
+    <h1>New Restaurant</h1>
+
+<form action="/restaurants" method="POST">
+<div>
+    <label for="title">Add Restaurant/Batista:</label><br>
+    <input id="title" type="text" name="restaurant[title]" placeholder="restaurant">
+</div>
+<div>
+    <label for="location">location:</label><br>
+    <input type="text" name="restaurant[location]" id="location">
+    <!-- <label for="comment">comments:</label><br> -->
+    <!-- <input type="text" name="isRestaurant" placeholder="Yes or No"> -->
+    <!-- <textarea name="comment" id="comment" cols="30" rows="5"></textarea> -->
+   
+</div>
+ <button>submit</button>
+</form>
+</div>
+    <div>
+    <a href="/restaurants">All Restaurants</a>
+</div>
+</body>
+</html>

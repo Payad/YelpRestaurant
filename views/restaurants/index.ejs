@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Restaurants</title>
+</head>
+<body>
+    <div>
+    <h1>All Restaurants List</h1>
+
+    <div>
+    <a href="/restaurants/new">Add a new restaurant</a>
+</div>
+<ul>
+
+<% for (let r of restaurants) {%>
+    <li><a href="/restaurants/<%=r._id%>"><%= r.title %></a> - <%= r.location %></li>
+
+<%}%>
+    <!-- <for(let r of restaurants) {  >
+        <li>< restaurant.name %></li>
+        <li> r.comment %> - <b> r.name></b></li> 
+        <a href="/restaurants/ r.id %>">details</a>
+    } > -->
+</ul> 
+    <!-- <ul>
+        <li>AliBaba's Mediterrrnian</li>
+        <li>Chung Lo Chinese Food</li>
+        <li>FireBrick Pizza</li>
+</ul> -->
+</div>
+</body>
+</html>

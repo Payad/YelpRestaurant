@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit</title>
+</head>
+<body>
+    <h1>Edit</h1>
+<form action="/restaurants/<%= restaurant._id %>?__method=PUT" method="POST">
+<div>
+    <label for="title">Edit</label><br>
+    <input id="title" type="text" name="restaurant[title]" placeholder="restaurant" value="<%=restaurant.title%>">
+</div>
+<div>
+    <label for="location">location:</label><br>
+    <input type="text" name="restaurant[location]" id="location" value="<%=restaurant.location%>">
+    <!-- <label for="comment">comments:</label><br> -->
+    <!-- <input type="text" name="isRestaurant" placeholder="Yes or No"> -->
+    <!-- <textarea name="comment" id="comment" cols="30" rows="5"></textarea> -->
+   
+</div>
+<!-- <textarea name="comment" id="" cols="30" rows="10">
+< comment.comment %> </textarea> -->
+<button>Save</button>
+</form>
+<a href="/restaurants/<%=restaurant._id%>">Back to restaurant</a>
+<a href="/restaurants">Back to Index</a>
+</body>
+</html>
