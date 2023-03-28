@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit</title>
 </head>
-<body>
+<body> -->
+<% layout('layouts/boilerplate') %>
     <h1>Edit</h1>
 <form action="/restaurants/<%= restaurant._id %>?__method=PUT" method="POST">
 <div>
@@ -27,5 +28,5 @@
 </form>
 <a href="/restaurants/<%=restaurant._id%>">Back to restaurant</a>
 <a href="/restaurants">Back to Index</a>
-</body>
-</html>
+<!-- </body>
+</html> -->
