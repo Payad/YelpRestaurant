@@ -26,6 +26,45 @@ db.once('open', () => {
 })
 
 
+
+///middleware
+// app.use((req, res, next) => {
+//     res.send('Hello')
+//     next()
+// })
+
+// app.use((req, res, next) => {
+//     console.log('WYD')
+// })
+
+// app.use((req, res, next) => {
+//     // console.log(req.query)
+//     const {password} = req.query;
+//     if(password === 'chickennugget') {
+//         next()
+// } else {
+//     console.log('Wrong password')
+// }
+// })
+
+// app.get('/cats', verifyPassword, (req, res) => {
+//     console.log('Meow');
+// })
+
+// app.get('/dogs', (req, res) => {
+//     console.log('Woof Woof')
+// })
+
+// function verifyPassword(req, res, next) {
+//     const {password} = req.query;
+//     if (password === 'chickennugget') {
+//         next();
+// } else {
+//     console.log('you need a password')
+// }
+// }
+
+
 // app.get('/restaurant', (req, res) => {
 //     res.send('Home')
 // })
