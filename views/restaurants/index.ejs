@@ -17,9 +17,24 @@
 <ul>
 
 <% for (let r of restaurants) {%>
-    <li><a href="/restaurants/<%=r._id%>"><%= r.title %></a> - <%= r.location %></li>
-
+    <!-- <li><a href="/restaurants/<r._id%>">< r.title %></a> - < r.location %></li> -->
+    <div class="card mb-3">
+        <div class="row">
+    <div class="col-md-4">
+    <img  class="img-fluid" src="<%=r.image%>" alt="">
+</div>
+<div class="col-md-8">
+    <div class="card-body">
+        <h5 class="card-title"><%=r.title%></h5>
+        <p class="card-text"><%=r.location%></p>
+        <p class="card-text"><%=r.description%></p>
+        <a class="btn btn-primary" href="/restaurants/<%=r.id%>">View <%=r.title%></a>
+    </div>
+</div>
+</div>
+    </div>
 <%}%>
+ 
     <!-- <for(let r of restaurants) {  >
         <li>< restaurant.name %></li>
         <li> r.comment %> - <b> r.name></b></li> 

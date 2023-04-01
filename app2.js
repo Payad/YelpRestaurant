@@ -94,7 +94,7 @@ res.redirect(`restaurants/${restaurant._id}`)
 
 
 app.get('/restaurants/:id', async (req, res) => {
-    const {id} = req.params;
+    // const {id} = req.params;
     // const foundId = await Restaurant.find((r) => r.id === id);
 const foundId = await Restaurant.findById(req.params.id)
     // res.render('restaurants/show', {foundId});

@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const RestaurantSchema = new Schema({
 title: String,
 description: String,
-location: String
+location: String,
+image: String,
 
 })
 
