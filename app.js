@@ -4,6 +4,7 @@ const app = express();
 const ejs = require('ejs');
 const path = require('path');
 const methodOverride = require('method-override')
+const AppError = require('./AppError');
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
@@ -212,6 +213,56 @@ db.once('open', () => {
 // ]
 
 
+app.get("/error", (req, res) => {
+    // res.send("error")
+chicken.fly();
+})
+
+//use a callback function for specific routes and insert them into route handler
+//use instead of generic app.use for every route
+const verifyPassword = ((req, res, next) => {
+    const {password} = req.query;
+    if(password === "chicken") {
+    next();
+} else {
+    // console.log('You need a password!!!')
+    // res.send('You need a password!!!');
+    throw new AppError('password required', 401)
+}
+})
+
+app.get('/cats', verifyPassword, (req, res) => {
+    console.log('MEOW');
+    res.send('MEOW');
+})
+
+app.get('/dogs', (req, res, next) => {
+    const {password} = req.query;
+    if(password === 'Woof') {
+    next()
+} else {
+    res.send('need password!!!');
+}
+
+})
+app.get('/secret', (req, res) => {
+
+    res.send("this is the secret: Hello")
+})
+
+app.use((req, res, next) => {
+    console.log('Woof Woof');
+    res.send('Woof Woof');
+})
+
+// app.use((err, req, res, next) => {
+// console.log("***********")
+// console.log("***ERROR***")
+// console.log("***********")
+// // res.status(500).send("Oh boy we got an error");
+// // console.log(err)
+// next(err);
+// })
 
 app.get('/', (req, res) => {
     res.send('HOME')

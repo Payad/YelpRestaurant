@@ -8,25 +8,41 @@
 </head>
 <body> -->
 <% layout('layouts/boilerplate') %>
-    <h1>Edit</h1>
+<div class="container row">
+    <h1 class="text-center">Edit Your Restaurant</h1>
+<div class="col-6 offset-3">
 <form action="/restaurants/<%= restaurant._id %>?__method=PUT" method="POST">
-<div>
-    <label for="title">Edit</label><br>
-    <input id="title" type="text" name="restaurant[title]" placeholder="restaurant" value="<%=restaurant.title%>">
+<div class="mb-3">
+    <label class="form-label" for="title">Edit Restaurant:</label><br>
+    <input class="form-control" id="title" type="text" name="restaurant[title]" placeholder="restaurant" value="<%=restaurant.title%>">
 </div>
-<div>
-    <label for="location">location:</label><br>
-    <input type="text" name="restaurant[location]" id="location" value="<%=restaurant.location%>">
+<div class="mb-3">
+    <label class="form-label" for="location">location:</label><br>
+    <input class="form-control" type="text" name="restaurant[location]" id="location" value="<%=restaurant.location%>">
     <!-- <label for="comment">comments:</label><br> -->
     <!-- <input type="text" name="isRestaurant" placeholder="Yes or No"> -->
     <!-- <textarea name="comment" id="comment" cols="30" rows="5"></textarea> -->
    
 </div>
+<div class="mb-3">
+    <label class="form-label" for="image">Image Url:</label><br>
+    <input class="form-control" id="image" type="text" name="restaurant[image]" placeholder="restaurant image">
+</div>
+<div class="mb-3">
+    <label class="form-label" for="description">Description:</label><br>
+    <textarea class="form-control" id="description" type="text" name="restaurant[description]" placeholder="restaurant"><%=restaurant.description%></textarea>
+</div>
 <!-- <textarea name="comment" id="" cols="30" rows="10">
 < comment.comment %> </textarea> -->
-<button>Save</button>
-</form>
-<a href="/restaurants/<%=restaurant._id%>">Back to restaurant</a>
+<button class="btn btn-success mr-4">Save</button>
+<a class="mx-4" href="/restaurants/<%=restaurant._id%>">Back to restaurant</a>
 <a href="/restaurants">Back to Index</a>
+</form>
+<!-- <a href="/restaurants/<=restaurant._id%>">Back to restaurant</a>
+<a href="/restaurants">Back to Index</a> -->
+</div>
+</div>
+<!-- <a href="/restaurants/<=restaurant._id%>">Back to restaurant</a>
+<a href="/restaurants">Back to Index</a> -->
 <!-- </body>
 </html> -->
