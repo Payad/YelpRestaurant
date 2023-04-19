@@ -11,14 +11,14 @@
 <div class="container row">
     <h1 class="text-center">Edit Your Restaurant</h1>
 <div class="col-6 offset-3">
-<form action="/restaurants/<%= restaurant._id %>?__method=PUT" method="POST">
+<form action="/restaurants/<%= restaurant._id %>?__method=PUT" method="POST" novalidate class="validated-form">
 <div class="mb-3">
     <label class="form-label" for="title">Edit Restaurant:</label><br>
-    <input class="form-control" id="title" type="text" name="restaurant[title]" placeholder="restaurant" value="<%=restaurant.title%>">
+    <input class="form-control" id="title" type="text" name="restaurant[title]" placeholder="restaurant" value="<%=restaurant.title%>" required>
 </div>
 <div class="mb-3">
     <label class="form-label" for="location">location:</label><br>
-    <input class="form-control" type="text" name="restaurant[location]" id="location" value="<%=restaurant.location%>">
+    <input class="form-control" type="text" name="restaurant[location]" id="location" value="<%=restaurant.location%>" required>
     <!-- <label for="comment">comments:</label><br> -->
     <!-- <input type="text" name="isRestaurant" placeholder="Yes or No"> -->
     <!-- <textarea name="comment" id="comment" cols="30" rows="5"></textarea> -->
@@ -26,11 +26,11 @@
 </div>
 <div class="mb-3">
     <label class="form-label" for="image">Image Url:</label><br>
-    <input class="form-control" id="image" type="text" name="restaurant[image]" placeholder="restaurant image">
+    <input class="form-control" id="image" type="text" name="restaurant[image]" placeholder="restaurant image" required>
 </div>
 <div class="mb-3">
     <label class="form-label" for="description">Description:</label><br>
-    <textarea class="form-control" id="description" type="text" name="restaurant[description]" placeholder="restaurant"><%=restaurant.description%></textarea>
+    <textarea class="form-control" id="description" type="text" name="restaurant[description]" placeholder="restaurant" required><%=restaurant.description%></textarea>
 </div>
 <!-- <textarea name="comment" id="" cols="30" rows="10">
 < comment.comment %> </textarea> -->

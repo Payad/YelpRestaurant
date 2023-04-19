@@ -12,26 +12,33 @@
     <div class="container row">
     <h1 class="text-center">New Restaurant</h1>
 <div class="col-6 offset-3">
-<form action="/restaurants" method="POST">
+<form action="/restaurants" method="POST" novalidate class="validated-form">
 <div class="mb-3">
     <label class="form-label" for="title">Add Restaurant/Batista:</label><br>
-    <input id="title" type="text" class="form-control" name="restaurant[title]" placeholder="restaurant">
+    <input id="title" type="text" class="form-control" name="restaurant[title]" placeholder="restaurant" required>
+    <div class="valid-feedback">
+        Looks Good!!
+</div>
 </div>
 <div class="mb-3">
         <label class="form-label" for="location">location:</label><br>
-        <input type="text" class="form-control" name="restaurant[location]" id="location">
-    <!-- <label for="comment">comments:</label><br> -->
-    <!-- <input type="text" name="isRestaurant" placeholder="Yes or No"> -->
+        <input type="text" class="form-control" name="restaurant[location]" id="location" required>
     <!-- <textarea name="comment" id="comment" cols="30" rows="5"></textarea> -->
+ <div class="valid-feedback">
+        Looks Good!!
+</div>
 </div>
     <div class="mb-3">
         <label class="form-label" for="image">Image Url:</label><br>
-        <input type="text" class="form-control" name="restaurant[image]" id="image">
+        <input type="text" class="form-control" name="restaurant[image]" id="image" required>
     </div>
     <div class="mb-3">
         <label for="description">Description:</label>
-        <textarea class="form-control" name="restaurant[description]" id="description"></textarea>
-    </div>
+        <textarea class="form-control" name="restaurant[description]" id="description" required></textarea>
+         <div class="valid-feedback">
+        Looks Good!!
+</div>
+</div>
  <button class="btn btn-success">submit</button>
 </form>
 </div>
@@ -41,3 +48,24 @@
 </div>
 <!-- </body>
 </html> -->
+
+<script>
+ (() => {
+'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.validated-form')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+</script>

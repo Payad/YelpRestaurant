@@ -4,8 +4,13 @@ const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
-const Restaurant = require('./models/restaurant')
+const Restaurant = require('./models/restaurant');
+const catchAsync = require('./utils/catchAsync');
+const AppError = require('./utils/AppError')
 const ejsMate = require('ejs-mate');
+const ObjectId = require('mongoose').Types.ObjectId;
+// const Joi = require('joi');
+const {restaurantSchema} = require('./schemas.js');
 
 app.engine('ejs', ejsMate)
 app.use(express.json());
@@ -15,7 +20,19 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 mongoose.set('strictQuery', false)
 
-
+const validateRestaurant = (req, res, next) => {
+const {error} = restaurantSchema.validate(req.body);
+// console.log(result);
+// if (!req.body.restaurant) {
+//     next(new AppError('Invalid Restaurant Data', 404))
+// } else {
+if(error) {
+    const msg = error.details.map((el => el.message)).join(',')
+    throw new AppError(msg, 404)
+} else {
+    next();
+}
+}
 
 mongoose.connect('mongodb://localhost:27017/YelpRestaurant', {
 useNewUrlParser: true, useUnifiedTopology: true})
@@ -85,41 +102,97 @@ app.get('/restaurants/new', (req, res) => {
     res.render('restaurants/new');
 })
 
-app.post('/restaurants', async (req, res) => {
+app.post('/restaurants', validateRestaurant, catchAsync(async (req, res, next) => {
+// try {
+
+//can write own error handler but use joi validation instead
+// if(!req.body.restaurant.title) {
+//     next(new AppError('invalid restaurant title data', 404))
+// }
 const restaurant = new Restaurant(req.body.restaurant);
 await restaurant.save();
 res.redirect(`restaurants/${restaurant._id}`)
+// }
+// } catch (e) {
+//     next(e)
+// }
 // res.send(req.body)
-})
+}));
 
-
-app.get('/restaurants/:id', async (req, res) => {
-    // const {id} = req.params;
-    // const foundId = await Restaurant.find((r) => r.id === id);
+app.get('/restaurants/:id', catchAsync(async (req, res, next) => {
+const {id} = req.params;
+// if (foundId) {
 const foundId = await Restaurant.findById(req.params.id)
     // res.render('restaurants/show', {foundId});
     res.render('restaurants/show', {foundId})
-});
+// } else {
+if (!ObjectId.isValid(id)) {
+    next(new AppError('Invalid Id', 404))
+}
+}));
 
-app.get('/restaurants/:id/edit', async (req, res) => {
+// app.get('/restaurants/:id', async (req, res, next) => {
+// try {
+//     const {id} = req.params;
+//     // const foundId = await Restaurant.find((r) => r.id === id);
+// //use this, but still throws cast errors
+// // if(!ObjectId.isValid(id)) {
+// //     throw new AppError('Invalid Id', 400);
+// // }
+// //use this, catches all invalid objectId's/cast errors
+// const foundId = await Restaurant.findById(req.params.id)
+//     // res.render('restaurants/show', {foundId});
+//     res.render('restaurants/show', {foundId})
+// }catch (e) {
+//     next(new AppError('Invalid Id', 404))
+// }
+// });
+
+app.get('/restaurants/:id/edit', catchAsync(async (req, res) => {
     const {id} = req.params;
     const restaurant = await Restaurant.findById(id);
     res.render('restaurants/edit', {restaurant});
-});
+}));
 
-app.put('/restaurants/:id', async (req, res) => {
+app.put('/restaurants/:id', catchAsync(async (req, res) => {
     const {id} = req.params;
 const restaurant = await Restaurant.findByIdAndUpdate(id, {...req.body.restaurant});
 res.redirect(`/restaurants/${restaurant._id}`)
 // res.send('It worked')
-})
+}));
 
-app.delete('/restaurants/:id', async (req, res) => {
+app.delete('/restaurants/:id', catchAsync(async (req, res) => {
 const {id} = req.params;
 await Restaurant.findByIdAndDelete(id);
 res.redirect('/restaurants');
+}));
+
+
+app.all('*', (req, res, next) => {
+    // res.send('404');
+    next(new AppError('Page Not Found', 404))
 })
 
+app.use((err, req, res, next) => {
+    // res.send('Oh boy something went wrong!')
+// const {status = 500, message = "Something went wrong"} = err
+const {status = 500} = err;
+if(!err.message) err.message = 'Oh no, Something went wrong';
+// res.status(status).send(message);
+res.status(status).render('error', {err})
+// res.send('oh boy something went wrong');
+})
+
+// app.use((err, req, res, next) => {
+//     console.log(err.name);
+//     next(err);
+// })
+
+// app.use((err, req, res, next) => {
+//     const {status = 500} = err;
+//     const {message = "Something went wrong"} = err;
+//     res.status(status).send(message);
+// })
 // app.get('/restaurants/new', (req, res) => {
 //     res.render('restaurants/new');
 // })

@@ -4,7 +4,7 @@ const app = express();
 const ejs = require('ejs');
 const path = require('path');
 const methodOverride = require('method-override')
-const AppError = require('./AppError');
+const AppError = require('./utils/AppError');
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
@@ -231,6 +231,10 @@ const verifyPassword = ((req, res, next) => {
 }
 })
 
+app.get('/admin', (req, res) => {
+    throw new AppError('Your not an Admin', 403)
+})
+
 app.get('/cats', verifyPassword, (req, res) => {
     console.log('MEOW');
     res.send('MEOW');
@@ -263,6 +267,20 @@ app.use((req, res, next) => {
 // // console.log(err)
 // next(err);
 // })
+
+app.use((err, req, res, next) => {
+    console.log(err);
+    next(err);
+})
+
+app.use((err, req, res, next) => {
+    const {status = 500} = err;
+    const {message} = err;
+    res.status(status).send(message)
+// res.status(500).send("Oh boy we got an error");
+// console.log(err)
+
+})
 
 app.get('/', (req, res) => {
     res.send('HOME')
