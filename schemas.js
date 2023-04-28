@@ -8,3 +8,11 @@ module.exports.restaurantSchema = Joi.object({
             description: Joi.string().required()
 }).required()
 })
+
+module.exports.reviewSchema = Joi.object({
+    review: Joi.object({
+    rating: Joi.number().min(1).max(5).required(),
+    body: Joi.string().required(),
+}).required()
+
+})

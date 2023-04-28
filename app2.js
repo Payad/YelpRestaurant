@@ -10,7 +10,9 @@ const AppError = require('./utils/AppError')
 const ejsMate = require('ejs-mate');
 const ObjectId = require('mongoose').Types.ObjectId;
 // const Joi = require('joi');
-const {restaurantSchema} = require('./schemas.js');
+const {restaurantSchema, reviewSchema} = require('./schemas.js');
+const Review = require('./models/reviews');
+const restaurant = require('./models/restaurant');
 
 app.engine('ejs', ejsMate)
 app.use(express.json());
@@ -27,6 +29,16 @@ const {error} = restaurantSchema.validate(req.body);
 //     next(new AppError('Invalid Restaurant Data', 404))
 // } else {
 if(error) {
+    const msg = error.details.map((el => el.message)).join(',')
+    throw new AppError(msg, 404)
+} else {
+    next();
+}
+}
+
+const validateReview = (req, res, next) => {
+    const {error} = reviewSchema.validate(req.body)
+    if(error) {
     const msg = error.details.map((el => el.message)).join(',')
     throw new AppError(msg, 404)
 } else {
@@ -122,8 +134,9 @@ res.redirect(`restaurants/${restaurant._id}`)
 app.get('/restaurants/:id', catchAsync(async (req, res, next) => {
 const {id} = req.params;
 // if (foundId) {
-const foundId = await Restaurant.findById(req.params.id)
+const foundId = await Restaurant.findById(req.params.id).populate('review');
     // res.render('restaurants/show', {foundId});
+// console.log(foundId);
     res.render('restaurants/show', {foundId})
 // } else {
 if (!ObjectId.isValid(id)) {
@@ -167,6 +180,34 @@ await Restaurant.findByIdAndDelete(id);
 res.redirect('/restaurants');
 }));
 
+//REVIEWS
+app.post('/restaurants/:id/reviews', validateReview, async(req, res) => {
+    // res.send('You made it');
+    const restaurant = await Restaurant.findById(req.params.id);
+    const review = new Review(req.body.review);
+    restaurant.review.push(review);
+    await review.save();
+    await restaurant.save();
+    res.redirect(`/restaurants/${restaurant._id}`);
+    // const {id} = req.params;
+    // const review = req.body.restaurant;
+})
+
+app.delete('/restaurants/:id/reviews/:reviewId', catchAsync(async(req, res, next) => {
+// console.log("Deleted!!")
+    const {id, reviewId} = req.params;
+//     if (!ObjectId.isValid(id)) {
+//     next(new AppError('Invalid id', 404))
+// } else {
+    // const {id, reviewId} = req.params;
+    await Restaurant.findByIdAndUpdate(id, {$pull: {review: reviewId}})
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/restaurants/${id}`);
+    // res.send('Delete Me')
+// }
+}));
+
+
 
 app.all('*', (req, res, next) => {
     // res.send('404');
@@ -195,6 +236,12 @@ res.status(status).render('error', {err})
 // })
 // app.get('/restaurants/new', (req, res) => {
 //     res.render('restaurants/new');
+// })
+
+// farmSchema.post('findOneAndDelete', async function(data) {
+//     if (farm.products.length) {
+//         const await Product.deleteMany({_id: {$in: farm.products}})
+// }
 // })
 
 app.listen(3000, () => {
