@@ -23,6 +23,8 @@ review: [
 
 });
 //mongoose middleware
+//to delete reviews from mongodb when campground is deleted 
+//(removing review and object id of review)
 RestaurantSchema.post('findOneAndDelete', async function(doc) {
     if (doc) {
     await Review.deleteMany({
