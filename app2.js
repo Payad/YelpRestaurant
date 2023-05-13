@@ -15,18 +15,46 @@ const ejsMate = require('ejs-mate');
 // const Restaurant = require('./models/restaurant');
 // const router = require('./routes/routerRests');
 const routerReviews = require('./routes/routerReviews');
-const routerRests = require('./routes/routerRests')
+const routerRests = require('./routes/routerRests');
+const session = require('express-session');
+const flash = require('connect-flash');
 // app.use('/', router);
 // app.use('/restaurants/:id/reviews', router)
 
 app.engine('ejs', ejsMate)
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use(methodOverride('__method'))
+app.use(methodOverride('__method'));
+app.use(express.static('public'))
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+// app.use(session(sessionConfig))
 mongoose.set('strictQuery', false)
 
+// //NOTE: this middleware must come after express.urlencoded to parse body correctly
+// app.use('/', routerReviews);
+// app.use('/', routerRests);
+
+const sessionConfig = {
+    secret: 'thisshouldbeabettersecret!',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+}
+
+}
+app.use(session(sessionConfig));
+app.use(flash());
+
+//Note: use flash locals before any route handlers or result in res.locals.messages will be undefined
+app.use((req, res, next) => {
+    res.locals.messages = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+})
 //NOTE: this middleware must come after express.urlencoded to parse body correctly
 app.use('/', routerReviews);
 app.use('/', routerRests);

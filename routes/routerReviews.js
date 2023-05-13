@@ -81,6 +81,7 @@ router.post(
     restaurant.review.push(review);
     await review.save();
     await restaurant.save();
+    req.flash('success', 'Successfully made a new review')
     res.redirect(`/restaurants/${restaurant.id}`);
   })
 );

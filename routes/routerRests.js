@@ -7,6 +7,7 @@ const AppError = require('../utils/AppError');
 // const {restaurantSchema, reviewSchema} = require('../schemas.js');
 const {restaurantSchema} = require('../schemas.js');
 const ObjectId = require('mongoose').Types.ObjectId;
+// const validations = require('/javascripts/validations');
 
 
 const validateRestaurant = (req, res, next) => {
@@ -53,7 +54,9 @@ router.post('/restaurants', validateRestaurant, catchAsync(async (req, res, next
 // }
 const restaurant = new Restaurant(req.body.restaurant);
 await restaurant.save();
-res.redirect(`restaurants/${restaurant._id}`)
+req.flash('success', 'Successfully made a new restaurant')
+// res.redirect(`restaurants/${restaurant._id}`)
+res.redirect('/restaurants')
 // }
 // } catch (e) {
 //     next(e)
@@ -67,6 +70,10 @@ const {id} = req.params;
 const foundId = await Restaurant.findById(req.params.id).populate('review');
     // res.render('restaurants/show', {foundId});
 // console.log(foundId);
+if (!foundId) {
+req.flash('error', 'Cannot find restaurant');
+return res.redirect('/restaurants');
+}
     res.render('restaurants/show', {foundId})
 // } else {
 if (!ObjectId.isValid(id)) {
@@ -77,12 +84,17 @@ if (!ObjectId.isValid(id)) {
 router.get('/restaurants/:id/edit', catchAsync(async (req, res) => {
     const {id} = req.params;
     const restaurant = await Restaurant.findById(id);
+    if (!restaurant) {
+    req.flash('error', 'Cannot find restaurant');
+    return res.redirect('/restaurants');
+    }
     res.render('restaurants/edit', {restaurant});
 }));
 
 router.put('/restaurants/:id', catchAsync(async (req, res) => {
     const {id} = req.params;
 const restaurant = await Restaurant.findByIdAndUpdate(id, {...req.body.restaurant});
+req.flash('success', 'Successfully updated restaurant')
 res.redirect(`/restaurants/${restaurant._id}`)
 // res.send('It worked')
 }));
