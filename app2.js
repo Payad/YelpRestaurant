@@ -18,6 +18,9 @@ const routerReviews = require('./routes/routerReviews');
 const routerRests = require('./routes/routerRests');
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
+const localStrategy = require('passport-local');
+const User = require('./models/users');
 // app.use('/', router);
 // app.use('/restaurants/:id/reviews', router)
 
@@ -49,7 +52,16 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
-//Note: use flash locals before any route handlers or result in res.locals.messages will be undefined
+//use passport session after session
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStrategy(User.authenticate()));
+
+//Serialize/Deserialize user
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+//Note: use flash locals before any route handlers or result in res.locals.messages undefined
 app.use((req, res, next) => {
     res.locals.messages = req.flash('success');
     res.locals.error = req.flash('error');
