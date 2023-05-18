@@ -52,7 +52,8 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
-//use passport session after session
+//use passport session after session/passport.session requires 
+//session to function properly
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new localStrategy(User.authenticate()));
