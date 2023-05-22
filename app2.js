@@ -16,6 +16,7 @@ const ejsMate = require('ejs-mate');
 // const router = require('./routes/routerRests');
 const routerReviews = require('./routes/routerReviews');
 const routerRests = require('./routes/routerRests');
+const userRoutes = require('./routes/userRoutes');
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
@@ -64,6 +65,8 @@ passport.deserializeUser(User.deserializeUser());
 
 //Note: use flash locals before any route handlers or result in res.locals.messages undefined
 app.use((req, res, next) => {
+    console.log(req.session)
+    res.locals.currentUser = req.user;
     res.locals.messages = req.flash('success');
     res.locals.error = req.flash('error');
     next();
@@ -71,6 +74,7 @@ app.use((req, res, next) => {
 //NOTE: this middleware must come after express.urlencoded to parse body correctly
 app.use('/', routerReviews);
 app.use('/', routerRests);
+app.use('/', userRoutes)
 
 // const validateRestaurant = (req, res, next) => {
 // const {error} = restaurantSchema.validate(req.body);

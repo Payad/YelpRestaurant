@@ -7,6 +7,7 @@ const AppError = require('../utils/AppError');
 // const {restaurantSchema, reviewSchema} = require('../schemas.js');
 const {restaurantSchema} = require('../schemas.js');
 const ObjectId = require('mongoose').Types.ObjectId;
+const {isLoggedIn} = require('../middleware');
 // const validations = require('/javascripts/validations');
 
 
@@ -41,11 +42,15 @@ router.get('/restaurants', async (req, res) => {
     res.render('restaurants/index', {restaurants})
 });
 
-router.get('/restaurants/new', (req, res) => {
+router.get('/restaurants/new', isLoggedIn, (req, res) => {
+//     if(!req.isAuthenticated()) {
+//     req.flash('error', 'You must be Logged in');
+//     return res.redirect('/login');
+// }
     res.render('restaurants/new');
 })
 
-router.post('/restaurants', validateRestaurant, catchAsync(async (req, res, next) => {
+router.post('/restaurants', isLoggedIn, validateRestaurant, catchAsync(async (req, res, next) => {
 // try {
 
 //can write own error handler but use joi validation instead
@@ -81,7 +86,7 @@ if (!ObjectId.isValid(id)) {
 }
 }));
 
-router.get('/restaurants/:id/edit', catchAsync(async (req, res) => {
+router.get('/restaurants/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     const {id} = req.params;
     const restaurant = await Restaurant.findById(id);
     if (!restaurant) {
@@ -91,7 +96,7 @@ router.get('/restaurants/:id/edit', catchAsync(async (req, res) => {
     res.render('restaurants/edit', {restaurant});
 }));
 
-router.put('/restaurants/:id', catchAsync(async (req, res) => {
+router.put('/restaurants/:id', isLoggedIn, catchAsync(async (req, res) => {
     const {id} = req.params;
 const restaurant = await Restaurant.findByIdAndUpdate(id, {...req.body.restaurant});
 req.flash('success', 'Successfully updated restaurant')
@@ -99,7 +104,7 @@ res.redirect(`/restaurants/${restaurant._id}`)
 // res.send('It worked')
 }));
 
-router.delete('/restaurants/:id', catchAsync(async (req, res) => {
+router.delete('/restaurants/:id', isLoggedIn, catchAsync(async (req, res) => {
 const {id} = req.params;
 await Restaurant.findByIdAndDelete(id);
 res.redirect('/restaurants');

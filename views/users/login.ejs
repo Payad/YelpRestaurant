@@ -1,0 +1,20 @@
+<% layout('layouts/boilerplate') %>
+<!-- < include('../partials/flash.ejs') %> -->
+<h1>Login</h1>
+<form action="" method="POST" novalidate class="validated-form">
+<div class="mb-3">
+    <label class="form-label" for="username">Username:</label><br>
+    <input id="username" type="text" class="form-control" name="username" placeholder="username" required>
+    <div class="valid-feedback">
+        Looks Good!!
+</div>
+</div>
+<div class="mb-3">
+    <label class="form-label" for="password">Password:</label><br>
+    <input id="password" type="password" class="form-control" name="password" placeholder="enter password" required>
+    <div class="valid-feedback">
+        Looks Good!!
+</div>
+</div>
+<button class="btn btn-success">Submit</button>
+</form>
