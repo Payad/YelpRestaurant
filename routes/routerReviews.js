@@ -55,7 +55,7 @@ const router = express.Router({ mergeParams: true });
  
 const Restaurant = require("../models/restaurant");
 const Review = require("../models/reviews");
-const {isLoggedIn} = require('../middleware');
+const {isLoggedIn, isReviewAuthor} = require('../middleware');
  
 const { reviewSchema } = require("../schemas.js");
  
@@ -71,6 +71,12 @@ const validateReview = (req, res, next) => {
     next();
   }
 };
+
+// const isReview = (req, res, next) => {
+//   const {id, reviewId} = req.params;
+//   const restaurant = Restaurant.findById(id);
+//   const review = Review.findById(reviewId)
+// }
  
 // CREATE 
 router.post(
@@ -79,17 +85,18 @@ router.post(
   catchAsync(async (req, res) => {
     const restaurant = await Restaurant.findById(req.params.id);
     const review = new Review(req.body.review);
+    review.author = req.user._id;
     restaurant.review.push(review);
     await review.save();
     await restaurant.save();
-    req.flash('success', 'Successfully made a new review')
+    req.flash('success', 'Successfully created a new review')
     res.redirect(`/restaurants/${restaurant.id}`);
   })
 );
  
 // DELETE 
 router.delete(
-  "/restaurants/:id/reviews/:reviewId", isLoggedIn,
+  "/restaurants/:id/reviews/:reviewId", isLoggedIn, isReviewAuthor,
   catchAsync(async (req, res) => {
     const { id, reviewId } = req.params;
     const restaurant = await Restaurant.findByIdAndUpdate(id, {

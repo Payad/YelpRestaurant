@@ -19,7 +19,11 @@ review: [
         type: Schema.Types.ObjectId,
         ref: 'Review'
     }
-]
+], 
+author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+}
 
 });
 //mongoose middleware

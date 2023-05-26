@@ -7,23 +7,32 @@ const AppError = require('../utils/AppError');
 // const {restaurantSchema, reviewSchema} = require('../schemas.js');
 const {restaurantSchema} = require('../schemas.js');
 const ObjectId = require('mongoose').Types.ObjectId;
-const {isLoggedIn} = require('../middleware');
+const {isLoggedIn, isAuthor, validateRestaurant} = require('../middleware');
 // const validations = require('/javascripts/validations');
 
+// const isAuthor = async(req, res, next) => {
+// const {id} = req.params;
+// const restaurant = await Restaurant.findById(id);
+// if (!restaurant.author.equals(req.user._id)) {
+//     req.flash('error', 'You do not have permission to do that')
+//     return res.redirect(`/restaurants/${id}`);
+// }
+//     next();
+// }
 
-const validateRestaurant = (req, res, next) => {
-const {error} = restaurantSchema.validate(req.body);
-// console.log(result);
-// if (!req.body.restaurant) {
-//     next(new AppError('Invalid Restaurant Data', 404))
+// const validateRestaurant = (req, res, next) => {
+// const {error} = restaurantSchema.validate(req.body);
+// // console.log(result);
+// // if (!req.body.restaurant) {
+// //     next(new AppError('Invalid Restaurant Data', 404))
+// // } else {
+// if(error) {
+//     const msg = error.details.map((el => el.message)).join(',')
+//     throw new AppError(msg, 404)
 // } else {
-if(error) {
-    const msg = error.details.map((el => el.message)).join(',')
-    throw new AppError(msg, 404)
-} else {
-    next();
-}
-}
+//     next();
+// }
+// }
 
 // // const validateReview = (req, res, next) => {
 // //     const {error} = reviewSchema.validate(req.body)
@@ -58,10 +67,11 @@ router.post('/restaurants', isLoggedIn, validateRestaurant, catchAsync(async (re
 //     next(new AppError('invalid restaurant title data', 404))
 // }
 const restaurant = new Restaurant(req.body.restaurant);
+restaurant.author = req.user._id;
 await restaurant.save();
 req.flash('success', 'Successfully made a new restaurant')
 // res.redirect(`restaurants/${restaurant._id}`)
-res.redirect('/restaurants')
+res.redirect(`/restaurants/${restaurant._id}`)
 // }
 // } catch (e) {
 //     next(e)
@@ -69,12 +79,17 @@ res.redirect('/restaurants')
 // res.send(req.body)
 }));
 
-router.get('/restaurants/:id', catchAsync(async (req, res, next) => {
+router.get('/restaurants/:id', isLoggedIn, catchAsync(async (req, res, next) => {
 const {id} = req.params;
 // if (foundId) {
-const foundId = await Restaurant.findById(req.params.id).populate('review');
+const foundId = await Restaurant.findById(req.params.id).populate({
+//using nesting to populate owner of review
+path: 'review',
+populate: {
+    path: 'author'
+}}).populate('author');
     // res.render('restaurants/show', {foundId});
-// console.log(foundId);
+console.log(foundId);
 if (!foundId) {
 req.flash('error', 'Cannot find restaurant');
 return res.redirect('/restaurants');
@@ -86,7 +101,7 @@ if (!ObjectId.isValid(id)) {
 }
 }));
 
-router.get('/restaurants/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
+router.get('/restaurants/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
     const {id} = req.params;
     const restaurant = await Restaurant.findById(id);
     if (!restaurant) {
@@ -96,8 +111,14 @@ router.get('/restaurants/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     res.render('restaurants/edit', {restaurant});
 }));
 
-router.put('/restaurants/:id', isLoggedIn, catchAsync(async (req, res) => {
+router.put('/restaurants/:id', isLoggedIn, isAuthor, validateRestaurant, catchAsync(async (req, res) => {
     const {id} = req.params;
+// const restaurant = await Restaurant.findByIdAndUpdate(id, {...req.body.restaurant});
+// const restaurant = await Restaurant.findById(id);
+// if (!restaurant.author.equals(req.user._id)) {
+//     req.flash('error', 'You do not have permission to do that')
+//     return res.redirect(`/restaurants/${id}`);
+// }
 const restaurant = await Restaurant.findByIdAndUpdate(id, {...req.body.restaurant});
 req.flash('success', 'Successfully updated restaurant')
 res.redirect(`/restaurants/${restaurant._id}`)
@@ -107,6 +128,7 @@ res.redirect(`/restaurants/${restaurant._id}`)
 router.delete('/restaurants/:id', isLoggedIn, catchAsync(async (req, res) => {
 const {id} = req.params;
 await Restaurant.findByIdAndDelete(id);
+req.flash('success', 'successfully deleted restaurant');
 res.redirect('/restaurants');
 }));
 

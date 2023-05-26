@@ -15,9 +15,10 @@ router.post('/register', catchAsync(async(req, res, next) => {
     // res.send(req.body);
     const newUser = new User({username, email});
     const registeredUser = await User.register(newUser, password);
+    //req.login requires a callback function
     req.login(registeredUser, err => {
         if(err) return next();
-    req.flash('success', 'Welcome to YelpRestaurant')
+    req.flash('success', 'Welcome to Yelp Restaurant')
     res.redirect('/restaurants');
 })
     console.log(registeredUser)
@@ -41,21 +42,52 @@ router.get('/login', (req, res) => {
 router.post('/login', storeReturnTo, passport.authenticate('local', {failureFlash: true, failureRedirect: '/login', keepSessionInfo: true }), (req, res) => {
     req.flash('success', 'Welcome Back!');
 const redirectUrl = res.locals.returnTo || '/restaurants';
+delete req.session.returnTo;
 res.redirect(redirectUrl);
     // res.redirect('/restaurants')
     
 })
 
+// router.get('/logout', (req, res, next) => {
+//     req.logout(function(error) {
+//         if(error) {
+//     return next(error)
+// }
+//  req.flash('success', 'You signed out');
+//     res.redirect('/restaurants');
+// })
+//     // req.flash('success', 'You signed out');
+//     // res.redirect('/restaurants');
+// })
+// router.get('/logout', function(req, res, next) {
+//   req.logout(function(err) {
+//     if (err) { return next(err); }
+//     req.flash('success', 'you signed out');
+//     res.redirect('/restaurants');
+//     // res.redirect('/restaurants');
+//   });
+//     // req.flash('success', 'you signed out');
+//     // res.redirect('/restaurants');
+// });
+
 router.get('/logout', (req, res, next) => {
-    req.logout(function(error) {
-        if(error) {
-    return next(error)
-}
- req.flash('success', 'You signed out');
-    res.redirect('/restaurants');
-})
-    // req.flash('success', 'You signed out');
-    // res.redirect('/restaurants');
-})
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        req.flash('success', "Goodbye!");
+        console.log('logged out')
+        return res.redirect('/restaurants');
+        
+
+    });
+ 
+});
+
+// router.get('/logout', (req, res) => {
+//     req.logout();
+// req.flash('success', "GoodBye");
+// res.redirect('/restaurants')
+// })
 
 module.exports = router;
