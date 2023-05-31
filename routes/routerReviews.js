@@ -53,14 +53,16 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
  
-const Restaurant = require("../models/restaurant");
-const Review = require("../models/reviews");
+// const Restaurant = require("../models/restaurant");
+// const Review = require("../models/reviews");
 const {isLoggedIn, isReviewAuthor} = require('../middleware');
  
 const { reviewSchema } = require("../schemas.js");
  
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
+
+const reviews = require('../controllers/reviews');
  
 const validateReview = (req, res, next) => {
   const { error } = reviewSchema.validate(req.body);
@@ -82,29 +84,33 @@ const validateReview = (req, res, next) => {
 router.post(
   "/restaurants/:id/reviews", isLoggedIn,
   validateReview,
-  catchAsync(async (req, res) => {
-    const restaurant = await Restaurant.findById(req.params.id);
-    const review = new Review(req.body.review);
-    review.author = req.user._id;
-    restaurant.review.push(review);
-    await review.save();
-    await restaurant.save();
-    req.flash('success', 'Successfully created a new review')
-    res.redirect(`/restaurants/${restaurant.id}`);
-  })
+  catchAsync(reviews.createReview
+// async (req, res) => {
+//     const restaurant = await Restaurant.findById(req.params.id);
+//     const review = new Review(req.body.review);
+//     review.author = req.user._id;
+//     restaurant.review.push(review);
+//     await review.save();
+//     await restaurant.save();
+//     req.flash('success', 'Successfully created a new review')
+//     res.redirect(`/restaurants/${restaurant.id}`);
+//   }
+)
 );
  
 // DELETE 
 router.delete(
   "/restaurants/:id/reviews/:reviewId", isLoggedIn, isReviewAuthor,
-  catchAsync(async (req, res) => {
-    const { id, reviewId } = req.params;
-    const restaurant = await Restaurant.findByIdAndUpdate(id, {
-      $pull: { reviews: reviewId },
-    });
-    await Review.findByIdAndDelete(reviewId);
-    res.redirect(`/restaurants/${restaurant._id}`);
-  })
+  catchAsync(reviews.deleteReview
+// async (req, res) => {
+//     const { id, reviewId } = req.params;
+//     const restaurant = await Restaurant.findByIdAndUpdate(id, {
+//       $pull: { reviews: reviewId },
+//     });
+//     await Review.findByIdAndDelete(reviewId);
+//     res.redirect(`/restaurants/${restaurant._id}`);
+//   }
+)
 );
  
 module.exports = router;

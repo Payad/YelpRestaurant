@@ -12,7 +12,7 @@
     <div class="container row">
     <h1 class="text-center">New Restaurant</h1>
 <div class="col-6 offset-3">
-<form action="/restaurants" method="POST" novalidate class="validated-form">
+<form action="/restaurants" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
 <div class="mb-3">
     <label class="form-label" for="title">Add Restaurant/Batista:</label><br>
     <input id="title" type="text" class="form-control" name="restaurant[title]" placeholder="restaurant" required>
@@ -29,8 +29,8 @@
 </div>
 </div>
     <div class="mb-3">
-        <label class="form-label" for="image">Image Url:</label><br>
-        <input type="text" class="form-control" name="restaurant[image]" id="image" required>
+        <label class="" name="image">
+        <input type="file" name="restaurant[image]" multiple>
     </div>
     <div class="mb-3">
         <label for="description">Description:</label>
@@ -44,10 +44,10 @@
 </div>
     <div class="text-center">
     <a href="/restaurants">All Restaurants</a>
-</div>
+    </div>
 </div>
 <!-- </body>
-</html> -->
+</html>  -->
 
 <!-- <script>
  (() => {

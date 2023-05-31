@@ -7,7 +7,7 @@ const Review = require('./models/reviews');
 module.exports.isLoggedIn = (req, res, next) => {
 // console.log('REQ.USER...', req.user)
 if(!req.isAuthenticated()) {
-//store the url they are requesting
+//store the url they are requesting//when passport logs you in it clears req.session.returnTo
 req.session.returnTo = req.originalUrl;
 console.log(req.path, req.originalUrl)
     req.flash('error', 'You must be signed in');
