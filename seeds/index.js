@@ -20,15 +20,28 @@ const seedDB = async () => {
     for (let i = 0; i < 50; i++) {
         const random1000 = Math.floor(Math.random() * 1000)
         const restaurant = new Restaurant({
+        //YOUR USER/AUTHOR ID
         author: '646be210d902a266de04c210',
         location: `${cities[random1000].city}, ${cities[random1000].state}`,
         title: `${sample(descriptors)} ${sample(types)}`,
+        geometry: { type: 'Point', coordinates: [ -117.162773, 32.71742 ] },
         // image: 'https://unsplash.com/collections/2468201/restaurants%2Fcafes',
         // image: 'https://source.unsplash.com/collections/2468201',
         // image: 'https://source.unsplash.com/collection/1343727',
         // image: 'https://source.unsplash.com/collection/1343727',
         // image: 'https://unsplash.com/collections/279876/restaurants',
-    image: 'https://source.unsplash.com/collection/2455617',
+        images: [{
+      url: 'https://res.cloudinary.com/dnuxxq2ad/image/upload/v1685724427/YelpRestaurant/omkqynpb11klwjuibxvs.jpg',
+      filename: 'YelpRestaurant/omkqynpb11klwjuibxvs',
+    //   _id: new ObjectId("647a1d13ed95900c4332115c")
+    },
+    {
+      url: 'https://res.cloudinary.com/dnuxxq2ad/image/upload/v1685724427/YelpRestaurant/oden7fx0k0mvd6vhgsxu.jpg',
+      filename: 'YelpRestaurant/oden7fx0k0mvd6vhgsxu',
+    //   _id: new ObjectId("647a1d13ed95900c4332115d")
+    }
+        ],
+    // image: 'https://source.unsplash.com/collection/2455617',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc non laoreet ante, sit amet malesuada ipsum. Maecenas eget venenatis orci, non posuere metus.'
 })
     await restaurant.save();

@@ -71,7 +71,8 @@ router.get('/restaurants/new', isLoggedIn, restaurants.renderNew
 
 router.post('/restaurants', isLoggedIn, upload.array('image'), validateRestaurant, catchAsync(restaurants.createNew
 // router.post('/restaurants', upload.array('image'), (req, res) => {
-//     console.log(req.body, req.files)
+//     console.log(req.body, req.files);
+//     res.send('It worked');
 // })
 // async (req, res, next) => {
 // // try {
@@ -130,7 +131,7 @@ router.get('/restaurants/:id/edit', isLoggedIn, isAuthor, catchAsync(restaurants
 // }
 ));
 
-router.put('/restaurants/:id', isLoggedIn, isAuthor, validateRestaurant, catchAsync(restaurants.renderUpdate
+router.put('/restaurants/:id', isLoggedIn, isAuthor, upload.array('image'), validateRestaurant, catchAsync(restaurants.renderUpdate
 // async (req, res) => {
 //     const {id} = req.params;
 // // const restaurant = await Restaurant.findByIdAndUpdate(id, {...req.body.restaurant});

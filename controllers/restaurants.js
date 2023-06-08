@@ -1,6 +1,10 @@
 const Restaurant = require('../models/restaurant');
 const AppError = require('../utils/AppError');
 const ObjectId = require('mongoose').Types.ObjectId;
+const cloudinary = require('cloudinary').v2;
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({accessToken: mapBoxToken})
 
 module.exports.restaurantIndex = async (req, res) => {
     // const restaurant = new Restaurant.find({});
@@ -23,9 +27,17 @@ module.exports.createNew = async (req, res, next) => {
 // if(!req.body.restaurant.title) {
 //     next(new AppError('invalid restaurant title data', 404))
 // }
+const geoData = await geocoder.forwardGeocode({
+    query: req.body.restaurant.location,
+    limit: 1
+}).send();
+// res.send(geoData.body.features[0].geometry)
 const restaurant = new Restaurant(req.body.restaurant);
+restaurant.images = req.files.map(f => ({url: f.path, filename: f.filename}))
+restaurant.geometry = geoData.body.features[0].geometry;
 restaurant.author = req.user._id;
 await restaurant.save();
+console.log(restaurant);
 req.flash('success', 'Successfully made a new restaurant')
 // res.redirect(`restaurants/${restaurant._id}`)
 res.redirect(`/restaurants/${restaurant._id}`)
@@ -70,6 +82,7 @@ module.exports.renderEdit = async (req, res) => {
 
 module.exports.renderUpdate = async (req, res) => {
     const {id} = req.params;
+console.log(req.body);
 // const restaurant = await Restaurant.findByIdAndUpdate(id, {...req.body.restaurant});
 // const restaurant = await Restaurant.findById(id);
 // if (!restaurant.author.equals(req.user._id)) {
@@ -77,6 +90,16 @@ module.exports.renderUpdate = async (req, res) => {
 //     return res.redirect(`/restaurants/${id}`);
 // }
 const restaurant = await Restaurant.findByIdAndUpdate(id, {...req.body.restaurant});
+const imgs = req.files.map((f) => ({url: f.path, filename: f.filename}));
+restaurant.images.push(...imgs);
+await restaurant.save();
+if (req.body.deleteImages) {
+    for (let filename of req.body.deleteImages) {
+        await cloudinary.uploader.destroy(filename)
+}
+await restaurant.updateOne({$pull: {images: {filename: {$in: req.body.deleteImages}}}})
+}
+// await restaurant.updateOne({$pull: {images: {filename: {$in: {deleteImages}}}}})
 req.flash('success', 'Successfully updated restaurant')
 res.redirect(`/restaurants/${restaurant._id}`)
 // res.send('It worked')

@@ -2,6 +2,20 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Review = require('./reviews')
 
+
+
+// imageSchema.virtual('thumbnail').get(function() {
+//     this.url.replace('/upload', '/upload/w_200')
+// })
+
+const ImageSchema = new Schema({
+    url: String,
+    filename: String
+})
+
+ImageSchema.virtual('thumbnail').get(function() {
+    return this.url.replace('/upload', '/upload/w_200')
+})
 const RestaurantSchema = new Schema({
 title: {
     type: String,
@@ -9,10 +23,29 @@ title: {
 },
 description: String,
 location: String,
-image: {
-    type: String,
-    // required: true
+images: [ImageSchema],
+geometry: {
+    type: {
+        type: String,
+        enum: ['Point'],
+        required: true
 },
+coordinates: {
+    type: [Number],
+    required: true
+}
+},
+// images: [{
+   
+//     url: String,
+//     filename: String
+//     // required: true
+// }],
+// images: [
+//     {
+
+// }
+// ]
 
 review: [
     {

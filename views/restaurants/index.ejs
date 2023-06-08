@@ -21,7 +21,12 @@
     <div class="card mb-3">
         <div class="row">
     <div class="col-md-4">
-    <img  class="img-fluid" src="<%=r.image%>" alt="">
+    <!-- <img  class="img-fluid" src="<=r.image%>" alt=""> -->
+<% if (r.images.length) { %>
+<img  class="img-fluid" src="<%=r.images[0].url%>" alt="">
+<% } else { %>
+    <img src="https://res.cloudinary.com/dnuxxq2ad/image/upload/v1685724427/YelpRestaurant/oden7fx0k0mvd6vhgsxu.jpg" alt="">
+<% } %>
 </div>
 <div class="col-md-8">
     <div class="card-body">
