@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate') %>
 <!-- < include('../partials/flash.ejs') %> -->
-<h1>Register</h1>
+<!-- <h1>Register</h1>
 <form action="" method="POST" novalidate class="validated-form">
 <div class="mb-3">
     <label class="form-label" for="username">Username:</label><br>
@@ -8,16 +8,16 @@
     <div class="valid-feedback">
         Looks Good!!
 </div>
-</div>
-<div class="mb-3">
+</div> -->
+<!-- <div class="mb-3">
     <label class="form-label" for="email">Email:</label><br>
-    <!-- <input id="email" type="email" class="form-control" name="email" placeholder="ex. johndoe@gmail.com" required> -->
+    <input id="email" type="email" class="form-control" name="email" placeholder="ex. johndoe@gmail.com" required>
      <input id="email" type="email" class="form-control" name="email" placeholder="Email address" required>
     <div class="valid-feedback">
         Looks Good!!
 </div>
-</div>
-<div class="mb-3">
+</div> -->
+<!-- <div class="mb-3">
     <label class="form-label" for="password">Password:</label><br>
     <input id="password" type="password" class="form-control" name="password" placeholder="enter password" required>
     <div class="valid-feedback">
@@ -25,4 +25,43 @@
 </div>
 </div>
 <button class="btn btn-success">Submit</button>
-</form>
+</form> -->
+
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="row">
+<!-- class="col-lg-6 offset-md-3 col-xl-8 offset-xl-4" -->
+        <div>
+            <div class="card shadow mb-3 overflow-hidden">
+                <img src="/images/restaurantmainimage.jpeg" alt="picture of restaurant">
+                <div class="card-body w-100 h-100">
+                <h5 class="card-title text-center">Register</h5>
+                <form action="/register" method="POST" novalidate class="validated-form">
+                    <div class="mb-3">
+                    <label class="form-label" for="username">Username:</label><br>
+                    <input id="username" type="text" class="form-control" name="username" placeholder="username" autofocus required>
+                    <div class="valid-feedback">
+                    Looks Good!!
+                    </div>
+                    </div>
+                    <div class="mb-3">
+                    <label class="form-label" for="email">Email:</label><br>
+                    <!-- <input id="email" type="email" class="form-control" name="email" placeholder="ex. johndoe@gmail.com" required> -->
+                    <input id="email" type="email" class="form-control" name="email" placeholder="Email address" required>
+                    <div class="valid-feedback">
+                        Looks Good!!
+                    </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="password">Password:</label><br>
+                        <input id="password" type="password" class="form-control" name="password" placeholder="enter password" required>
+                        <div class="valid-feedback">
+                            Looks Good!!
+                    </div>
+                    </div>
+                    <button class="btn btn-success btn-block w-100">Register Account</button>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

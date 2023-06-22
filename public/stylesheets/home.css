@@ -1,0 +1,88 @@
+body {
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    /* url('../images/restaurantmainimage.jpeg'); */
+    /* url('https://unsplash.com/photos/UezWo2oY4M0'); */
+    url('https://images.unsplash.com/photo-1472504929007-6d7cd0ef7d50?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+    background-size: cover;
+/* background-position: center; */
+    /* background: url("https://unsplash.com/photos/UezWo2oY4M0") */
+    /* background-color: blue */
+}
+.cover-container {
+    max-width: 60vw;
+}
+
+/* h3 {
+    font-size: 10px;
+} */
+
+.nav-link {
+    padding: 0.25rem 0;
+    font-weight: 700;
+    /* color: rgba(255, 255, 255, 0.5); */
+    margin-left: 1rem;
+    border-bottom: 0.25rem solid transparent;
+}
+
+a.nav-link {
+    color: rgb(255, 255, 255, 0.5);
+}
+
+
+.nav-link:hover {
+    /* border-bottom-color: 2px solid rgba(241, 239, 239, 0.5); */
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.5);
+    /* border-bottom: rgba(255, 255, 255, 0.5); */
+    /* z-index: 2 */
+    /* border: 1; */
+}
+
+a.nav-link:hover {
+    color: rgb(255, 255, 255, 0.5);
+}
+
+a.nav-link.active {
+    color: white !important;
+    border-bottom-color: white;
+}
+
+
+/* .px-3 {
+    position: absolute;
+    left: 0;
+    margin-top: 20%;
+} */
+
+.btn-secondary {
+    color: #333 !important;
+    text-shadow: none;
+}
+
+/* a#btn {
+    color: black;
+}
+
+.btn-secondary, .btn-secondary:hover {
+    color: #333;
+    text-shadow: none;
+}
+
+a.btn.btn-lg.btn-secondary.font-weight-bold.text-white.bg-white {
+    color: #333;
+    text-shadow: none;
+    background-color: black;
+}
+
+.text-color {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+a.bg-white {
+    background-color: black;
+}
+
+.btn {
+    color: black;
+} */

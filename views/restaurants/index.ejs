@@ -8,7 +8,9 @@
 </head>
 <body> -->
 <%layout('layouts/boilerplate')%>
+<link rel="stylesheet" href="/stylesheets/app.css">
     <div>
+<div id="cluster-map"></div>
     <h1>All Restaurants List</h1>
 
     <div>
@@ -18,19 +20,20 @@
 
 <% for (let r of restaurants) {%>
     <!-- <li><a href="/restaurants/<r._id%>">< r.title %></a> - < r.location %></li> -->
-    <div class="card mb-3">
+    <div class="card mb-3 w-100">
         <div class="row">
     <div class="col-md-4">
     <!-- <img  class="img-fluid" src="<=r.image%>" alt=""> -->
 <% if (r.images.length) { %>
-<img  class="img-fluid" src="<%=r.images[0].url%>" alt="">
+<img crossorigin="anonymous" class="img-fluid" src="<%=r.images[0].url%>" alt="">
 <% } else { %>
-    <img src="https://res.cloudinary.com/dnuxxq2ad/image/upload/v1685724427/YelpRestaurant/oden7fx0k0mvd6vhgsxu.jpg" alt="">
+    <img crossorigin="anonymous" src="https://res.cloudinary.com/dnuxxq2ad/image/upload/v1685724427/YelpRestaurant/oden7fx0k0mvd6vhgsxu.jpg" alt="">
 <% } %>
 </div>
 <div class="col-md-8">
     <div class="card-body">
         <h5 class="card-title"><%=r.title%></h5>
+        <!-- <h5 class="card-title"><=r.properties.popUpMarkup%></h5> -->
         <p class="card-text"><%=r.location%></p>
         <p class="card-text"><%=r.description%></p>
         <a class="btn btn-primary" href="/restaurants/<%=r.id%>">View <%=r.title%></a>
@@ -52,5 +55,10 @@
         <li>FireBrick Pizza</li>
 </ul> -->
 </div>
+<script>
+const mapBoxToken = '<%-process.env.MAPBOX_TOKEN%>';
+const restaurants = {features: <%-JSON.stringify(restaurants)%>}
+</script>
+<script src="/javascripts/clusterMap.js"></script>
 <!-- </body>
 </html> -->

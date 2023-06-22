@@ -6,6 +6,10 @@ const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geocoder = mbxGeocoding({accessToken: mapBoxToken})
 
+module.exports.renderHome = (req, res) => {
+    res.render('restaurants/home')
+}
+
 module.exports.restaurantIndex = async (req, res) => {
     // const restaurant = new Restaurant.find({});
     const restaurants = await Restaurant.find();

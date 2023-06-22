@@ -24,7 +24,10 @@ const seedDB = async () => {
         author: '646be210d902a266de04c210',
         location: `${cities[random1000].city}, ${cities[random1000].state}`,
         title: `${sample(descriptors)} ${sample(types)}`,
-        geometry: { type: 'Point', coordinates: [ -117.162773, 32.71742 ] },
+        geometry: { type: 'Point', 
+        // coordinates: [ -117.162773, 32.71742 ]
+         coordinates: [cities[random1000].longitude, cities[random1000].latitude]
+        },
         // image: 'https://unsplash.com/collections/2468201/restaurants%2Fcafes',
         // image: 'https://source.unsplash.com/collections/2468201',
         // image: 'https://source.unsplash.com/collection/1343727',

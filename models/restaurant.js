@@ -16,6 +16,9 @@ const ImageSchema = new Schema({
 ImageSchema.virtual('thumbnail').get(function() {
     return this.url.replace('/upload', '/upload/w_200')
 })
+
+const opts = {toJSON: {virtuals: true}}
+
 const RestaurantSchema = new Schema({
 title: {
     type: String,
@@ -58,10 +61,18 @@ author: {
     ref: 'User'
 }
 
-});
+}, opts);
+
+
+RestaurantSchema.virtual('properties.popUpMarkup').get(function() {
+    return `<strong><a href="/restaurants/${this._id}">${this.title}</a></strong>
+            <p>${this.description.substring(0, 20)}...</p>`
+})
 //mongoose middleware
 //to delete reviews from mongodb when campground is deleted 
 //(removing review and object id of review)
+
+
 RestaurantSchema.post('findOneAndDelete', async function(doc) {
     if (doc) {
     await Review.deleteMany({
